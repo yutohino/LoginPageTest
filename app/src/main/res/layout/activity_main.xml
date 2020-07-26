@@ -22,8 +22,18 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/alert_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="#F10000"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/user_container"
+            app:layout_constraintLeft_toLeftOf="@id/user_container" />
+
         <LinearLayout
-            android:id="@+id/address_container"
+            android:id="@+id/user_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
@@ -34,26 +44,37 @@
             app:layout_constraintTop_toBottomOf="@+id/title">
 
             <EditText
-                android:id="@+id/ed_address"
+                android:id="@+id/ed_user"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_edit_text"
-                android:inputType="textEmailAddress"
+                android:inputType="textCapCharacters"
                 android:padding="10dp" />
 
             <TextView
-                android:id="@+id/tv_address"
+                android:id="@+id/tv_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="-54dp"
                 android:background="#FFFFFF"
                 android:padding="2dp"
-                android:text="メールアドレス"
+                android:text="ユーザー名"
                 android:textColor="@color/likeGoogleBlue" />
 
         </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/alert_pass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="#F10000"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/pass_container"
+            app:layout_constraintLeft_toLeftOf="@id/pass_container" />
 
         <LinearLayout
             android:id="@+id/pass_container"
@@ -61,9 +82,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="@+id/address_container"
-            app:layout_constraintStart_toStartOf="@+id/address_container"
-            app:layout_constraintTop_toBottomOf="@+id/address_container">
+            app:layout_constraintEnd_toEndOf="@+id/user_container"
+            app:layout_constraintStart_toStartOf="@+id/user_container"
+            app:layout_constraintTop_toBottomOf="@+id/user_container">
 
             <EditText
                 android:id="@+id/ed_pass"
@@ -103,7 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="50dp"
-            android:background="@drawable/ripple_button"
+            android:background="@drawable/bg_button_disable"
             android:text="ログイン"
             android:textColor="#FFFFFF"
             android:textSize="16sp"

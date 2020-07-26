@@ -16,18 +16,24 @@ class MainActivity : AppCompatActivity() {
 
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            log()
+        override fun onTextChanged(c: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            c?.let {
+                observeOnUser(it)
+                setClickableBtn()
+            }
         }
     }
 
     val passTextWatcher = object : TextWatcher {
-        override fun afterTextChanged(p0: Editable?) {}
+        override fun afterTextChanged(e: Editable?) {}
 
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            log()
+        override fun onTextChanged(c: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            c?.let {
+                observeOnPass(it)
+                setClickableBtn()
+            }
         }
     }
 
@@ -39,14 +45,38 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        mBinding.edAddress.addTextChangedListener(addressTextWatcher)
+        mBinding.edUser.addTextChangedListener(addressTextWatcher)
 
         mBinding.edPass.addTextChangedListener(passTextWatcher)
+
+        mBinding.button.setOnClickListener {
+
+        }
     }
 
-    var int = 0
-    fun log() {
-        int++
-        println("入力した回数：$int")
+    fun observeOnUser(c: CharSequence) {
+        mBinding.alertUser.text = if (c.length > 20) {
+            "※20文字以内にしてください"
+        } else {
+            ""
+        }
+    }
+
+    fun observeOnPass(c: CharSequence) {
+        mBinding.alertPass.text = if (c.length < 8 || c.length > 16) {
+            "※8〜16文字にしてください"
+        } else {
+            ""
+        }
+    }
+
+    fun setClickableBtn() {
+        if (mBinding.edUser.text.length <= 20 && mBinding.edPass.text.length >= 8 && mBinding.edPass.text.length <= 16) {
+            mBinding.button.isClickable = true
+            mBinding.button.background = resources.getDrawable(R.drawable.ripple_button)
+        } else {
+            mBinding.button.isClickable = false
+            mBinding.button.background = resources.getDrawable(R.drawable.bg_button_disable)
+        }
     }
 }

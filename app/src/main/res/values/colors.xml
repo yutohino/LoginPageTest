@@ -7,4 +7,5 @@
     <color name="likeGoogleBlue">#2D75F1</color>
     <color name="button_login">#31BD17</color>
     <color name="ripple_button_login">#207A0F</color>
+    <color name="button_disalbe">#BCBCBC</color>
 </resources>
