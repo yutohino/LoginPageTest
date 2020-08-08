@@ -8,6 +8,9 @@ import android.util.Log
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import com.example.loginpagetest.databinding.ActivityMainBinding
+import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Observable
 
 class MainActivity : AppCompatActivity() {
     lateinit var mBinding: ActivityMainBinding
@@ -44,10 +47,25 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val edUser = mBinding.edUser
+        RxTextView.textChangeEvents(edUser)
+            .map {
+                observeOnUser(it.text())
+                setClickableBtn()
+            }
+            .subscribe()
+        val edPass = mBinding.edPass
+        RxTextView.textChangeEvents(edPass)
+            .map {
+                observeOnPass(it.text())
+                setClickableBtn()
+            }
+            .subscribe()
 
-        mBinding.edUser.addTextChangedListener(addressTextWatcher)
 
-        mBinding.edPass.addTextChangedListener(passTextWatcher)
+//        mBinding.edUser.addTextChangedListener(addressTextWatcher)
+
+//        mBinding.edPass.addTextChangedListener(passTextWatcher)
 
         mBinding.button.setOnClickListener {
 
