@@ -111,7 +111,18 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/text_alert"
+            android:id="@+id/text_user_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#F10000"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/text_pass_alert"
+            app:layout_constraintLeft_toLeftOf="@+id/pass_container"
+            app:layout_constraintRight_toRightOf="@id/pass_container"
+            app:layout_constraintTop_toBottomOf="@+id/pass_container" />
+
+        <TextView
+            android:id="@+id/text_pass_alert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#F10000"
@@ -119,13 +130,13 @@
             app:layout_constraintBottom_toTopOf="@id/button"
             app:layout_constraintLeft_toLeftOf="@+id/pass_container"
             app:layout_constraintRight_toRightOf="@id/pass_container"
-            app:layout_constraintTop_toBottomOf="@+id/pass_container" />
+            app:layout_constraintTop_toBottomOf="@+id/text_user_alert" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_margin="50dp"
             android:background="@drawable/bg_button_disable"
             android:text="ログイン"
             android:textColor="#FFFFFF"

@@ -6,11 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.core.widget.addTextChangedListener
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import com.example.loginpagetest.databinding.ActivityMainBinding
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -25,7 +23,8 @@ class MainActivity : AppCompatActivity() {
     val KEY_STRING4 = "KEY_STRING4"
 
     lateinit var mBinding: ActivityMainBinding
-    val subject = PublishSubject.create<CharSequence>()
+    val userSubject = PublishSubject.create<String>()
+    val passSubject = PublishSubject.create<String>()
     val compositeDisposable = CompositeDisposable()
 
     val userTextWatcher = object : TextWatcher {
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         override fun onTextChanged(c: CharSequence?, p1: Int, p2: Int, p3: Int) {
             c?.let {
                 observeOnUser(it)
-                subject.onNext(it.toString())
+                userSubject.onNext(it.toString())
             }
         }
     }
@@ -50,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             c?.let {
                 observeOnPass(it)
                 setClickableBtn()
-                subject.onNext(it)
+                passSubject.onNext(it.toString())
             }
         }
     }
@@ -65,14 +64,7 @@ class MainActivity : AppCompatActivity() {
     var userList = ArrayList<String>()
     override fun onResume() {
         super.onResume()
-        val userDisposable = subject.distinctUntilChanged()
-            .debounce(500, TimeUnit.MILLISECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-            searchUserSharedPref(it)
-        }
-        compositeDisposable.add(userDisposable)
+        setSubscribe()
 
         mBinding.edUser.addTextChangedListener(userTextWatcher)
 
@@ -121,32 +113,64 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setClickableBtn() {
-        if (mBinding.edUser.text.length <= 20 && mBinding.edPass.text.length >= 8 && mBinding.edPass.text.length <= 16) {
+        if (mBinding.edUser.text.length <= 20 && mBinding.edPass.text.length >= 8 && mBinding.edPass.text.length <= 16 && mBinding.textUserAlert.text.isEmpty()) {
             mBinding.button.isClickable = true
-            mBinding.button.background = resources.getDrawable(R.drawable.ripple_button)
+            mBinding.button.background =
+                ResourcesCompat.getDrawable(resources, R.drawable.ripple_button, null)
         } else {
             mBinding.button.isClickable = false
-            mBinding.button.background = resources.getDrawable(R.drawable.bg_button_disable)
+            mBinding.button.background =
+                ResourcesCompat.getDrawable(resources, R.drawable.bg_button_disable, null)
         }
     }
 
-    fun searchUserSharedPref(c: CharSequence) {
+    fun searchUserSharedPref(s: String) {
         for (user in userList) {
-            if (c.toString() == user) {
-                mBinding.textAlert.text = "そのユーザー名はすでに使われています"
+            if (s == user) {
+                mBinding.textUserAlert.text = "そのユーザー名はすでに使われています"
                 mBinding.button.isClickable = false
-                mBinding.button.background = resources.getDrawable(R.drawable.bg_button_disable)
+                mBinding.button.background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.bg_button_disable, null)
                 return
             }
-            if (c.toString() != user && mBinding.textAlert.text.isNotEmpty()) {
-                mBinding.textAlert.text = ""
+            if (s != user && mBinding.textUserAlert.text.isNotEmpty()) {
+                mBinding.textUserAlert.text = ""
                 setClickableBtn()
             }
         }
     }
 
-    fun searchPassSharedPref(c: CharSequence) {
+    fun searchPassSharedPref(s: String) {
+        var count = 0
+        for (i in s.iterator()) {
+            if (i == 'e') {
+                count++
+            }
+        }
+        if (count > 0) {
+            mBinding.textPassAlert.text = resources.getString(R.string.text_pass_alert, count)
+        } else {
+            mBinding.textPassAlert.text = ""
+        }
+    }
 
+    fun setSubscribe() {
+        val userDisposable = userSubject.distinctUntilChanged()
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                searchUserSharedPref(it)
+            }
+        val passDisposable = passSubject.distinctUntilChanged()
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                searchPassSharedPref(it)
+            }
+        compositeDisposable.add(userDisposable)
+        compositeDisposable.add(passDisposable)
     }
 
     override fun onDestroy() {

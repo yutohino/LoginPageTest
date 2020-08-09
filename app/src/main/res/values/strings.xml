@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LoginPageTest</string>
+
+    <string name="text_pass_alert">「e」が%1$d個入ってます。</string>
 </resources>
