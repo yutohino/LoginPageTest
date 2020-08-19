@@ -4,8 +4,13 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
+    <color name="bg_white">#FFFFFF</color>
+
     <color name="likeGoogleBlue">#2D75F1</color>
     <color name="button_login">#31BD17</color>
     <color name="ripple_button_login">#207A0F</color>
     <color name="button_disalbe">#BCBCBC</color>
+
+    <!--  OpenWeatherMap  -->
+    <color name="ripple_item_place">#D8D8D8</color>
 </resources>

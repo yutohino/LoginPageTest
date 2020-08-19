@@ -1,6 +1,7 @@
 package com.example.loginpagetest
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     val KEY_STRING3 = "KEY_STRING3"
     val KEY_STRING4 = "KEY_STRING4"
 
-    lateinit var mBinding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     val userSubject = PublishSubject.create<String>()
     val passSubject = PublishSubject.create<String>()
     val compositeDisposable = CompositeDisposable()
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
     }
 
     lateinit var prefs: SharedPreferences
@@ -64,19 +65,22 @@ class MainActivity : AppCompatActivity() {
     var userList = ArrayList<String>()
     override fun onResume() {
         super.onResume()
+        startActivity(Intent(this, WeatherActivity::class.java))
+        return
+
         setSubscribe()
 
-        mBinding.edUser.addTextChangedListener(userTextWatcher)
+        binding.edUser.addTextChangedListener(userTextWatcher)
 
-        mBinding.edPass.addTextChangedListener(passTextWatcher)
+        binding.edPass.addTextChangedListener(passTextWatcher)
 
-        mBinding.button.setOnClickListener {
+        binding.button.setOnClickListener {
 
         }
 
         prefs = getSharedPreferences(KEY_PREFS, Context.MODE_PRIVATE)
         editor = prefs.edit()
-        mBinding.buttonAdd.setOnClickListener {
+        binding.buttonAdd.setOnClickListener {
             editor.putString(KEY_STRING1, "ひの")
             editor.putString(KEY_STRING2, "ゆうと")
             editor.putString(KEY_STRING3, "yuto")
@@ -97,7 +101,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun observeOnUser(c: CharSequence) {
-        mBinding.alertUser.text = if (c.length > 20) {
+        binding.alertUser.text = if (c.length > 20) {
             "※20文字以内にしてください"
         } else {
             ""
@@ -105,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun observeOnPass(c: CharSequence) {
-        mBinding.alertPass.text = if (c.length < 8 || c.length > 16) {
+        binding.alertPass.text = if (c.length < 8 || c.length > 16) {
             "※8〜16文字にしてください"
         } else {
             ""
@@ -113,28 +117,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setClickableBtn() {
-        if (mBinding.edUser.text.length <= 20 && mBinding.edPass.text.length >= 8 && mBinding.edPass.text.length <= 16 && mBinding.textUserAlert.text.isEmpty()) {
-            mBinding.button.isClickable = true
-            mBinding.button.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.ripple_button, null)
+        if (binding.edUser.text.length <= 20 && binding.edPass.text.length >= 8 && binding.edPass.text.length <= 16 && binding.textUserAlert.text.isEmpty()) {
+            binding.button.isClickable = true
+            binding.button.background = ResourcesCompat.getDrawable(resources, R.drawable.ripple_button, null)
         } else {
-            mBinding.button.isClickable = false
-            mBinding.button.background =
-                ResourcesCompat.getDrawable(resources, R.drawable.bg_button_disable, null)
+            binding.button.isClickable = false
+            binding.button.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_button_disable, null)
         }
     }
 
     fun searchUserSharedPref(s: String) {
         for (user in userList) {
             if (s == user) {
-                mBinding.textUserAlert.text = "そのユーザー名はすでに使われています"
-                mBinding.button.isClickable = false
-                mBinding.button.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.bg_button_disable, null)
+                binding.textUserAlert.text = "そのユーザー名はすでに使われています"
+                binding.button.isClickable = false
+                binding.button.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_button_disable, null)
                 return
             }
-            if (s != user && mBinding.textUserAlert.text.isNotEmpty()) {
-                mBinding.textUserAlert.text = ""
+            if (s != user && binding.textUserAlert.text.isNotEmpty()) {
+                binding.textUserAlert.text = ""
                 setClickableBtn()
             }
         }
@@ -148,25 +149,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
         if (count > 0) {
-            mBinding.textPassAlert.text = resources.getString(R.string.text_pass_alert, count)
+            binding.textPassAlert.text = resources.getString(R.string.text_pass_alert, count)
         } else {
-            mBinding.textPassAlert.text = ""
+            binding.textPassAlert.text = ""
         }
     }
 
     fun setSubscribe() {
-        val userDisposable = userSubject.distinctUntilChanged()
-            .debounce(500, TimeUnit.MILLISECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+        val userDisposable = userSubject.distinctUntilChanged().debounce(500, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                 searchUserSharedPref(it)
             }
-        val passDisposable = passSubject.distinctUntilChanged()
-            .debounce(500, TimeUnit.MILLISECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+        val passDisposable = passSubject.distinctUntilChanged().debounce(500, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                 searchPassSharedPref(it)
             }
         compositeDisposable.add(userDisposable)
