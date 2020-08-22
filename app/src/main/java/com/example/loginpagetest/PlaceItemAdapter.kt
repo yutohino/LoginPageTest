@@ -18,7 +18,9 @@ class PlaceItemAdapter(var dataList: List<PlaceData>) : RecyclerView.Adapter<Pla
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.textPlace.text = dataList[position].place
+        holder.binding.textPlace.text = dataList[position].placeTitle
+
+        // TODO：タップした際にAPIリクエストを送る。
     }
 
     class ViewHolder constructor(val binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root)

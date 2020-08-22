@@ -32,10 +32,10 @@ class WeatherActivity : AppCompatActivity() {
 
     fun createList(): List<PlaceData> {
         var list = ArrayList<PlaceData>()
-        list.add(PlaceData("Tokyo"))
-        list.add(PlaceData("Kyoto"))
-        list.add(PlaceData("Osaka"))
-        list.add(PlaceData("Fukuoka"))
+        list.add(PlaceData("Tokyo", "tokyo"))
+        list.add(PlaceData("Kyoto", "kyoto"))
+        list.add(PlaceData("Osaka", "osaka"))
+        list.add(PlaceData("Fukuoka", "fukuoka"))
         return list
     }
 }
