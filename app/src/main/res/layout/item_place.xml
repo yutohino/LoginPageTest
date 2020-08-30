@@ -4,15 +4,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple_place_item"
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:id="@+id/text_place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ripple_place_item"
-            android:clickable="true"
-            android:focusable="true"
             android:padding="10dp"
             android:text="ここになんか項目名が入ります。"
             app:layout_constraintBottom_toBottomOf="parent"
