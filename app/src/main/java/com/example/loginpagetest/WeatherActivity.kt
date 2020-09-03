@@ -84,7 +84,7 @@ class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
     }
 
     fun setText(item : WeatherItem) {
-        Log.d("testas", item.toString())
+        // TODO：TextViewに情報をセットしていく
     }
 
     override fun onDestroy() {

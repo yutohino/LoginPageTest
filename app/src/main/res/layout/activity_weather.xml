@@ -11,7 +11,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="350dp"
             android:elevation="5dp"
             app:layout_constraintBottom_toTopOf="@+id/weather_info_container"
             app:layout_constraintEnd_toEndOf="parent"
@@ -30,9 +30,12 @@
             app:layout_constraintTop_toBottomOf="@+id/rv">
 
             <TextView
-                android:id="@+id/tv_info_title"
+                android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#85DBEA"
+                android:elevation="2dp"
+                android:padding="5dp"
                 android:text="OpenWeatherMap"
                 android:textAlignment="center"
                 android:textSize="20sp"
@@ -42,15 +45,54 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/weather_info_container" />
 
-            <TextView
-                android:id="@+id/info_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Apiの情報がなんか入ります。"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+            <LinearLayout
+                android:id="@+id/weather_main_info_container"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:paddingVertical="5dp"
+                android:paddingStart="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/icon_weather"
+                app:layout_constraintEnd_toStartOf="@id/icon_weather"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_info_title" />
+                app:layout_constraintTop_toBottomOf="@id/tv_title">
+
+                <TextView
+                    android:id="@+id/tv_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地名"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="天気と詳細と雲の%"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/icon_weather"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:elevation="5dp"
+                android:padding="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="5dp"
+                android:background="#4A5E5E5E"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weather_main_info_container" />
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -59,11 +101,102 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/info_detail" />
+                app:layout_constraintTop_toBottomOf="@id/weather_main_info_container">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_time_calculation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="計算時刻" />
+
+                    <TextView
+                        android:id="@+id/tv_temp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="気温" />
+
+                    <TextView
+                        android:id="@+id/tv_feels_like_temp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="体感温度" />
+
+                    <TextView
+                        android:id="@+id/tv_temp_min"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="最低気温" />
+
+                    <TextView
+                        android:id="@+id/tv_temp_max"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="最高気温" />
+
+                    <TextView
+                        android:id="@+id/tv_pressure"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="気圧" />
+
+                    <TextView
+                        android:id="@+id/tv_humidity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="湿度" />
+
+                    <TextView
+                        android:id="@+id/tv_speed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="風速" />
+
+                    <TextView
+                        android:id="@+id/tv_degree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="風向" />
+
+                    <TextView
+                        android:id="@+id/tv_sunrise"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="日の出" />
+
+                    <TextView
+                        android:id="@+id/tv_sunset"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="日の入り" />
+
+                    <TextView
+                        android:id="@+id/tv_json"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:text="送られてきたJSONデータ" />
+
+                </LinearLayout>
+
+            </ScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
