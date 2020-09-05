@@ -90,11 +90,9 @@ class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
                     progressCircle.strokeWidth = 10f
                     progressCircle.centerRadius = 30f
                     progressCircle.start()
-                    val option: RequestOptions = RequestOptions()
-                        .placeholder(progressCircle)
+                    val option: RequestOptions = RequestOptions().placeholder(progressCircle)
                         .error(R.drawable.error)
-                    Glide.with(this@WeatherActivity)
-                        .setDefaultRequestOptions(option)
+                    Glide.with(this@WeatherActivity).setDefaultRequestOptions(option)
                         .load("https://openweathermap.org/img/wn/${t.weather[0].icon}@2x.png")
                         .into(binding.iconWeather)
                 }
