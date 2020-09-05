@@ -6,6 +6,9 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.loginpagetest.data.WeatherItem
 import com.example.loginpagetest.databinding.ActivityWeatherBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,11 +19,12 @@ import io.reactivex.schedulers.Schedulers
 
 class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
 
-    val compositeDisposable = CompositeDisposable()
-
     lateinit var binding: ActivityWeatherBinding
 
     lateinit var weatherApiService: WeatherApiService
+
+    val compositeDisposable = CompositeDisposable()
+    var currentCityName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,19 +75,33 @@ class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
      * @param cityName タップしたリストの地名のパラメータ
      */
     override fun onRequest(cityName: String) {
+        if (currentCityName == cityName) {
+            return
+        }
+        currentCityName = cityName
+
         // TODO: 遅延処理でストリームを打ち消す
-        // TODO: JSONが取得できた段階で、天気アイコンのAPIリクエストも実行・表示を行う
         val weatherDisposable: Disposable = weatherApiService.getWeather(cityName, OpenWeatherMapApi.API_KEY)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableSingleObserver<WeatherItem>() {
                 override fun onSuccess(t: WeatherItem) {
                     setText(t)
+                    val progressCircle = CircularProgressDrawable(this@WeatherActivity)
+                    progressCircle.strokeWidth = 10f
+                    progressCircle.centerRadius = 30f
+                    progressCircle.start()
+                    val option: RequestOptions = RequestOptions()
+                        .placeholder(progressCircle)
+                        .error(R.drawable.error)
+                    Glide.with(this@WeatherActivity)
+                        .setDefaultRequestOptions(option)
+                        .load("https://openweathermap.org/img/wn/${t.weather[0].icon}@2x.png")
+                        .into(binding.iconWeather)
                 }
 
                 override fun onError(e: Throwable) {
                     Toast.makeText(this@WeatherActivity, "通信エラーが発生しました", Toast.LENGTH_SHORT).show()
                 }
-
             })
         compositeDisposable.add(weatherDisposable)
     }
