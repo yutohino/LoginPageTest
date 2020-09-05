@@ -9,4 +9,7 @@ interface WeatherApiService {
 
     @GET("weather")
     fun getWeather(@Query("q") cityName: String, @Query("appid") apiKey: String): Single<WeatherItem>
+
+//    @GET("")
+//    fun getWeatherIcon(): Single
 }

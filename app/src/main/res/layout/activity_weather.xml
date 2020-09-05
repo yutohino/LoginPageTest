@@ -11,7 +11,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="280dp"
             android:elevation="5dp"
             app:layout_constraintBottom_toTopOf="@+id/weather_info_container"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,13 +47,13 @@
 
             <LinearLayout
                 android:id="@+id/weather_main_info_container"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingVertical="5dp"
                 android:paddingStart="12dp"
-                app:layout_constraintBottom_toBottomOf="@+id/icon_weather"
-                app:layout_constraintEnd_toStartOf="@id/icon_weather"
+                app:layout_constraintBottom_toBottomOf="@+id/divider"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_title">
 
@@ -75,15 +75,6 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/icon_weather"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:elevation="5dp"
-                android:padding="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
             <View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
@@ -94,107 +85,128 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/weather_main_info_container" />
 
-            <ScrollView
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/weather_main_info_container">
+                app:layout_constraintTop_toBottomOf="@id/divider">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/icon_weather"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:elevation="5dp"
+                    android:padding="5dp" />
+
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/weather_main_info_container">
 
-                    <TextView
-                        android:id="@+id/tv_time_calculation"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="計算時刻" />
+                        android:orientation="vertical"
+                        android:paddingStart="12dp">
 
-                    <TextView
-                        android:id="@+id/tv_temp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="気温" />
+                        <TextView
+                            android:id="@+id/tv_time_calculation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="計算時刻" />
 
-                    <TextView
-                        android:id="@+id/tv_feels_like_temp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="体感温度" />
+                        <TextView
+                            android:id="@+id/tv_temp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="気温" />
 
-                    <TextView
-                        android:id="@+id/tv_temp_min"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="最低気温" />
+                        <TextView
+                            android:id="@+id/tv_feels_like_temp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="体感温度" />
 
-                    <TextView
-                        android:id="@+id/tv_temp_max"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="最高気温" />
+                        <TextView
+                            android:id="@+id/tv_temp_min"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="最低気温" />
 
-                    <TextView
-                        android:id="@+id/tv_pressure"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="気圧" />
+                        <TextView
+                            android:id="@+id/tv_temp_max"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="最高気温" />
 
-                    <TextView
-                        android:id="@+id/tv_humidity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="湿度" />
+                        <TextView
+                            android:id="@+id/tv_pressure"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="気圧" />
 
-                    <TextView
-                        android:id="@+id/tv_speed"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="風速" />
+                        <TextView
+                            android:id="@+id/tv_humidity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="湿度" />
 
-                    <TextView
-                        android:id="@+id/tv_degree"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="風向" />
+                        <TextView
+                            android:id="@+id/tv_speed"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="風速" />
 
-                    <TextView
-                        android:id="@+id/tv_sunrise"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="日の出" />
+                        <TextView
+                            android:id="@+id/tv_degree"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="風向" />
 
-                    <TextView
-                        android:id="@+id/tv_sunset"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="日の入り" />
+                        <TextView
+                            android:id="@+id/tv_sunrise"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="日の出" />
 
-                    <TextView
-                        android:id="@+id/tv_json"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="送られてきたJSONデータ" />
+                        <TextView
+                            android:id="@+id/tv_sunset"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="日の入り" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_json"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="送られてきたJSONデータ" />
 
-            </ScrollView>
+                    </LinearLayout>
+
+                </ScrollView>
+
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
