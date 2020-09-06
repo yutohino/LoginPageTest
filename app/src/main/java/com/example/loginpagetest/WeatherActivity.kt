@@ -2,6 +2,7 @@ package com.example.loginpagetest
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -15,6 +16,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
 
@@ -24,6 +26,7 @@ class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
 
     val compositeDisposable = CompositeDisposable()
     var currentCityName: String? = null
+    val weatherSubject = PublishSubject.create<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +47,27 @@ class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
         adapter.notifyDataSetChanged()
 
         weatherApiService = Provider.provideWeatherApiService()!!
+
+        val weatherDisposable: Disposable = weatherSubject.switchMap {
+            // 短時間に連続でAPIコール実施してきたら、新しいAPIコールの処理だけ実行する（subscvibe()内の処理を1回だけ実行）
+            weatherApiService.getWeather(it, OpenWeatherMapApi.API_KEY)
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
+            Log.d("testas", "実行した")
+            setText(it)
+            val progressCircle = CircularProgressDrawable(this@WeatherActivity)
+            progressCircle.strokeWidth = 10f
+            progressCircle.centerRadius = 30f
+            progressCircle.start()
+            val option: RequestOptions = RequestOptions().placeholder(progressCircle)
+                .error(R.drawable.error)
+            Glide.with(this@WeatherActivity).setDefaultRequestOptions(option)
+                .load("https://openweathermap.org/img/wn/${it.weather[0].icon}@2x.png")
+                .into(binding.iconWeather)
+        }, {
+            Toast.makeText(this@WeatherActivity, "通信エラーが発生しました", Toast.LENGTH_SHORT).show()
+            Log.d("testas", "通信エラーが発生しました")
+        })
+        compositeDisposable.add(weatherDisposable)
     }
 
     /**
@@ -79,23 +103,7 @@ class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
         }
         currentCityName = cityName
 
-        // TODO: 遅延処理でストリームを打ち消す
-        val weatherDisposable: Disposable = weatherApiService.getWeather(cityName, OpenWeatherMapApi.API_KEY)
-            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-                setText(it)
-                val progressCircle = CircularProgressDrawable(this@WeatherActivity)
-                progressCircle.strokeWidth = 10f
-                progressCircle.centerRadius = 30f
-                progressCircle.start()
-                val option: RequestOptions = RequestOptions().placeholder(progressCircle)
-                    .error(R.drawable.error)
-                Glide.with(this@WeatherActivity).setDefaultRequestOptions(option)
-                    .load("https://openweathermap.org/img/wn/${it.weather[0].icon}@2x.png")
-                    .into(binding.iconWeather)
-            }, {
-                Toast.makeText(this@WeatherActivity, "通信エラーが発生しました", Toast.LENGTH_SHORT).show()
-            })
-        compositeDisposable.add(weatherDisposable)
+        weatherSubject.onNext(cityName)
     }
 
     /**
