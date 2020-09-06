@@ -11,11 +11,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.loginpagetest.data.WeatherItem
 import com.example.loginpagetest.databinding.ActivityWeatherBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
 
@@ -82,24 +81,19 @@ class WeatherActivity : AppCompatActivity(), PlaceItemAdapter.Listener {
 
         // TODO: 遅延処理でストリームを打ち消す
         val weatherDisposable: Disposable = weatherApiService.getWeather(cityName, OpenWeatherMapApi.API_KEY)
-            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(object : DisposableSingleObserver<WeatherItem>() {
-                override fun onSuccess(t: WeatherItem) {
-                    setText(t)
-                    val progressCircle = CircularProgressDrawable(this@WeatherActivity)
-                    progressCircle.strokeWidth = 10f
-                    progressCircle.centerRadius = 30f
-                    progressCircle.start()
-                    val option: RequestOptions = RequestOptions().placeholder(progressCircle)
-                        .error(R.drawable.error)
-                    Glide.with(this@WeatherActivity).setDefaultRequestOptions(option)
-                        .load("https://openweathermap.org/img/wn/${t.weather[0].icon}@2x.png")
-                        .into(binding.iconWeather)
-                }
-
-                override fun onError(e: Throwable) {
-                    Toast.makeText(this@WeatherActivity, "通信エラーが発生しました", Toast.LENGTH_SHORT).show()
-                }
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
+                setText(it)
+                val progressCircle = CircularProgressDrawable(this@WeatherActivity)
+                progressCircle.strokeWidth = 10f
+                progressCircle.centerRadius = 30f
+                progressCircle.start()
+                val option: RequestOptions = RequestOptions().placeholder(progressCircle)
+                    .error(R.drawable.error)
+                Glide.with(this@WeatherActivity).setDefaultRequestOptions(option)
+                    .load("https://openweathermap.org/img/wn/${it.weather[0].icon}@2x.png")
+                    .into(binding.iconWeather)
+            }, {
+                Toast.makeText(this@WeatherActivity, "通信エラーが発生しました", Toast.LENGTH_SHORT).show()
             })
         compositeDisposable.add(weatherDisposable)
     }

@@ -1,7 +1,6 @@
 package com.example.loginpagetest
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,10 +9,10 @@ import android.text.TextWatcher
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import com.example.loginpagetest.databinding.ActivityMainBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity() {
     var userList = ArrayList<String>()
     override fun onResume() {
         super.onResume()
-        startActivity(Intent(this, WeatherActivity::class.java))
 
         setSubscribe()
 

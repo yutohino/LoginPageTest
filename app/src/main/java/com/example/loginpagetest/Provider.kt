@@ -1,7 +1,7 @@
 package com.example.loginpagetest
 
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class Provider {
@@ -14,7 +14,7 @@ class Provider {
                 val retrofit: Retrofit = Retrofit.Builder()
                     .baseUrl("https://api.openweathermap.org/data/2.5/")
                     .addConverterFactory(GsonConverterFactory.create()) // コンバーター
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // RxJavaでSchedulerの設定
+                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) // RxJavaでSchedulerの設定
                     .build()
                 weatherApiService = retrofit.create(WeatherApiService::class.java)
             }
